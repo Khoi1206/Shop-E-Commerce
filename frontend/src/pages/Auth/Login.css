@@ -1,0 +1,19 @@
+#login-container{
+	background: url(../../components/Assets/background.jpg);
+	width: auto;
+	height: 43.97rem;
+}
+
+#login-form{
+	box-shadow: 0 0 10px rgba(255, 255, 255, .2);
+	border: 2px solid rgba(255, 255, 255, .2);
+}
+
+#login-form input::placeholder{
+	color: #fff;
+}
+
+#loader{
+	display: unset;
+	margin-bottom: 1.1px;
+}

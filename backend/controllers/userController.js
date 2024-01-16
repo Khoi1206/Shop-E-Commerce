@@ -1,6 +1,5 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
-import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
 const userController = {
@@ -13,14 +12,15 @@ const userController = {
 		}
 
 		const userExists = await User.findOne({ email });
-		if (userExists) res.status(400).send("User already exists");
+		if (userExists) {
+			res.status(400);
+			throw new Error("User already exists");
+		}
 
-		const salt = await bcrypt.genSalt(10);
-		const hashedPassword = await bcrypt.hash(password, salt);
 		const newUser = await new User({
 			username,
 			email,
-			password: hashedPassword,
+			password,
 		});
 
 		try {
@@ -45,23 +45,18 @@ const userController = {
 
 		const existingUser = await User.findOne({ email });
 
-		if (existingUser) {
-			const isPasswordValid = await bcrypt.compare(
-				password,
-				existingUser.password
-			);
+		if (existingUser && (await existingUser.matchPassword(password))) {
+			generateToken(res, existingUser._id);
 
-			if (isPasswordValid) {
-				createToken(res, existingUser._id);
-
-				res.status(201).json({
-					_id: existingUser._id,
-					username: existingUser.username,
-					email: existingUser.email,
-					isAdmin: existingUser.isAdmin,
-				});
-				return;
-			}
+			res.status(201).json({
+				_id: existingUser._id,
+				username: existingUser.username,
+				email: existingUser.email,
+				isAdmin: existingUser.isAdmin,
+			});
+		} else {
+			res.status(404);
+			throw new Error("Invalid email or password");
 		}
 	}),
 
@@ -105,9 +100,7 @@ const userController = {
 			user.email = req.body.email || user.email;
 
 			if (req.body.password) {
-				const salt = await bcrypt.genSalt(10);
-				const hashedPassword = await bcrypt.hash(req.body.password, salt);
-				user.password = hashedPassword;
+				user.password = req.body.password;
 			}
 
 			const updatedUser = await user.save();
