@@ -17,9 +17,7 @@ connectDB();
 const app = express();
 
 // Set up
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(express.json(), express.urlencoded({ extended: true }), cookieParser());
 
 app.use("/", routes);
 
