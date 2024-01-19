@@ -5,7 +5,7 @@ import { useLoginMutation } from "../../redux/api/usersApiSlice";
 import { setCredentials } from "../../redux/features/auth/authSlide";
 import { toast } from "react-toastify";
 import Loader from "../../components/Loader";
-import "./Login.css";
+import "./Style.css";
 
 const Login = () => {
 	const [email, setEmail] = useState("");
@@ -31,11 +31,11 @@ const Login = () => {
 	const submitHandler = async (e) => {
 		e.preventDefault();
 		try {
-		  const res = await login({ email, password }).unwrap();
-		  dispatch(setCredentials({ ...res }));
-		  navigate(redirect);
+			const res = await login({ email, password }).unwrap();
+			dispatch(setCredentials({ ...res }));
+			navigate(redirect);
 		} catch (err) {
-		  toast.error(err?.data?.message || err.error);
+			toast.error(err?.data?.message || err.error);
 		}
 	};
 
@@ -46,7 +46,10 @@ const Login = () => {
 					className="mt-[10rem] p-8 rounded-2xl bg-transparent"
 					id="login-form"
 				>
-					<form onSubmit={submitHandler} className="container w-[20rem] h-[14rem]">
+					<form
+						onSubmit={submitHandler}
+						className="container w-[20rem] h-[14rem]"
+					>
 						<div>
 							<input
 								type="email"
@@ -72,11 +75,11 @@ const Login = () => {
 							type="submit"
 							className="bg-blue-500 hover:bg-blue-700 text-white py-2 rounded cursor-pointer font-bold w-full mb-[5px]"
 						>
-							{isLoading ? <Loader />: "Sign In"}
+							{isLoading ? <Loader /> : "Sign In"}
 						</button>
 						<div className="border-t-2 border-white-200 h-0 my-2 overflow-hidden"></div>
 						<div className="bg-green-500 hover:bg-green-700 text-white py-2 rounded cursor-pointer w-[15rem] my-[1rem] mx-auto font-bold text-center">
-							<Link to="/register">Register</Link>
+							<Link className="pl-[5.4rem] pr-[5.4rem] pt-[0.4rem] pb-[0.4rem]" to="/register">Register</Link>
 						</div>
 					</form>
 				</div>
