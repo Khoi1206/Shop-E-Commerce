@@ -79,7 +79,12 @@ const Login = () => {
 						</button>
 						<div className="border-t-2 border-white-200 h-0 my-2 overflow-hidden"></div>
 						<div className="bg-green-500 hover:bg-green-700 text-white py-2 rounded cursor-pointer w-[15rem] my-[1rem] mx-auto font-bold text-center">
-							<Link className="pl-[5.4rem] pr-[5.4rem] pt-[0.4rem] pb-[0.4rem]" to="/register">Register</Link>
+							<Link
+								className="pl-[5.4rem] pr-[5.4rem] pt-[0.4rem] pb-[0.4rem]"
+								to="/register"
+							>
+								Register
+							</Link>
 						</div>
 					</form>
 				</div>

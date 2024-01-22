@@ -159,12 +159,16 @@ const userController = {
 
 	// [Put] /:id
 	updateUserById: asyncHandler(async (req, res) => {
-		const user = await User.findById(req.params.id);
+		try {
+			const user = await User.findById(req.params.id);
 
-		if (user) {
+			if (!user) {
+				res.status(404).json({ error: "User not found" });
+				return;
+			}
+
 			user.username = req.body.username || user.username;
 			user.email = req.body.email || user.email;
-			user.isAdmin = Boolean(req.body.isAdmin);
 
 			const updatedUser = await user.save();
 
@@ -172,11 +176,9 @@ const userController = {
 				_id: updatedUser._id,
 				username: updatedUser.username,
 				email: updatedUser.email,
-				isAdmin: updatedUser.isAdmin,
 			});
-		} else {
-			res.status(404);
-			throw new Error("User not found");
+		} catch (error) {
+			res.status(500).json({ error: "Internal Server Error" });
 		}
 	}),
 };
