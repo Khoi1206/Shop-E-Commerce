@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
+import bcrypt from "bcryptjs";
 import createToken from "../utils/createToken.js";
 
 const userController = {
@@ -13,15 +14,12 @@ const userController = {
 
 		const userExists = await User.findOne({ email });
 		if (userExists) {
-			res.status(400);
 			throw new Error("User already exists");
 		}
 
-		const newUser = await new User({
-			username,
-			email,
-			password,
-		});
+		const salt = await bcrypt.genSalt(10);
+		const hashedPassword = await bcrypt.hash(password, salt);
+		const newUser = new User({ username, email, password: hashedPassword });
 
 		try {
 			await newUser.save();
@@ -45,17 +43,27 @@ const userController = {
 
 		const existingUser = await User.findOne({ email });
 
-		if (existingUser && (await existingUser.matchPassword(password))) {
-			generateToken(res, existingUser._id);
+		if (existingUser) {
+			const isPasswordValid = await bcrypt.compare(
+				password,
+				existingUser.password
+			);
 
-			res.status(201).json({
-				_id: existingUser._id,
-				username: existingUser.username,
-				email: existingUser.email,
-				isAdmin: existingUser.isAdmin,
-			});
+			if (isPasswordValid) {
+				createToken(res, existingUser._id);
+
+				res.status(201).json({
+					_id: existingUser._id,
+					username: existingUser.username,
+					email: existingUser.email,
+					isAdmin: existingUser.isAdmin,
+				});
+			} else {
+				res.status(401);
+				throw new Error("Invalid email or password");
+			}
 		} else {
-			res.status(404);
+			res.status(401);
 			throw new Error("Invalid email or password");
 		}
 	}),
@@ -100,7 +108,9 @@ const userController = {
 			user.email = req.body.email || user.email;
 
 			if (req.body.password) {
-				user.password = req.body.password;
+				const salt = await bcrypt.genSalt(10);
+				const hashedPassword = await bcrypt.hash(req.body.password, salt);
+				user.password = hashedPassword;
 			}
 
 			const updatedUser = await user.save();
@@ -149,12 +159,16 @@ const userController = {
 
 	// [Put] /:id
 	updateUserById: asyncHandler(async (req, res) => {
-		const user = await User.findById(req.params.id);
+		try {
+			const user = await User.findById(req.params.id);
 
-		if (user) {
+			if (!user) {
+				res.status(404).json({ error: "User not found" });
+				return;
+			}
+
 			user.username = req.body.username || user.username;
 			user.email = req.body.email || user.email;
-			user.isAdmin = Boolean(req.body.isAdmin);
 
 			const updatedUser = await user.save();
 
@@ -162,11 +176,9 @@ const userController = {
 				_id: updatedUser._id,
 				username: updatedUser.username,
 				email: updatedUser.email,
-				isAdmin: updatedUser.isAdmin,
 			});
-		} else {
-			res.status(404);
-			throw new Error("User not found");
+		} catch (error) {
+			res.status(500).json({ error: "Internal Server Error" });
 		}
 	}),
 };

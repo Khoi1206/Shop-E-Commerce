@@ -1,0 +1,78 @@
+#navigation-container {
+	width: 4%;
+	transition: width 0.3s ease-in-out;
+	overflow: hidden; /* Hide overflowing content during transition */
+}
+
+#navigation-container:hover {
+	width: 13%;
+}
+
+/* Initially hide nav-item-name */
+.nav-item-name {
+	display: none;
+	transition: opacity 0.2s ease-in-out; /* Add opacity transition */
+}
+
+#navigation-container:hover .nav-item-name {
+	display: block;
+	opacity: 1;
+}
+
+/* login */
+
+#login-container {
+	background: url(../../components/Assets/background.jpg);
+	width: auto;
+	height: 43.97rem;
+}
+
+#login-form {
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+	border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#login-form input::placeholder {
+	color: #fff;
+}
+
+#loader {
+	display: unset;
+	margin-bottom: 1.1px;
+}
+
+/* register */
+
+#register-container {
+	background: url(../../components/Assets/background.jpg);
+	width: auto;
+	height: 43.97rem;
+}
+
+#register-form {
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+	border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#register-form input::placeholder {
+	color: #fff;
+}
+
+/* Profile */
+
+#profile-container {
+	background: url(../../components/Assets/background.jpg);
+	width: auto;
+	height: 43.97rem;
+}
+
+#profile-form {
+	box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+	border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+#profile-form input::placeholder {
+	color: #fff;
+}
+
+/* Userlist */

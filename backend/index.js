@@ -17,14 +17,17 @@ connectDB();
 const app = express();
 
 // Set up
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.use(express.json(), express.urlencoded({ extended: true }), cookieParser());
 
+// Router
 app.use("/", routes);
 
+// Load Image
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname + "/uploads")));
+
+// Set up API
 if (process.env.NODE_ENV === "production") {
-	const __dirname = path.resolve();
 	app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
 	app.get("*", (req, res) =>
