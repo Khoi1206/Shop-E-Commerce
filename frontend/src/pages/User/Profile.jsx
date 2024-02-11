@@ -58,6 +58,7 @@ const Profile = () => {
 						Update Profile
 					</h2>
 					<div className="border-t-2 border-white-200 h-0 my-2 overflow-hidden"></div>
+
 					<form onSubmit={submitHandler}>
 						<div className="mb-2">
 							<label className="block text-white mb-1">Name</label>

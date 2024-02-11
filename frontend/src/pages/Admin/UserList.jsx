@@ -9,7 +9,7 @@ import {
 } from "../../redux/api/usersApiSlice";
 import { toast } from "react-toastify";
 // ⚠️⚠️⚠️ don't forget this ⚠️⚠️⚠️⚠️
-// import AdminMenu from "./AdminMenu";
+import AdminMenu from "./AdminMenu";
 
 import "../Auth/Style.css";
 
@@ -71,7 +71,7 @@ const UserList = () => {
 					</Message>
 				) : (
 					<div className="flex flex-col md:flex-row">
-						{/* <AdminMenu /> */}
+						<AdminMenu />
 						<table className="w-full md:w-4/5 table-auto border-collapse">
 							<thead>
 								<tr className="text-center border-slate-300">

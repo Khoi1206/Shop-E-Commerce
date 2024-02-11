@@ -94,7 +94,7 @@ const Navigation = () => {
 					)}
 				</button>
 
-				{dropdownOpen && userInfo && (
+				{dropdownOpen && userInfo &&(
 					<ul
 						className={`absolute space-y-2 bg-white text-gray-600 py-2 mb-[20px] rounded-lg ${
 							!userInfo.isAdmin

@@ -9,7 +9,7 @@ import {
 import { toast } from "react-toastify";
 import CategoryForm from "../../components/CategoryForm";
 import Modal from "../../components/Modal";
-// import AdminMenu from "./AdminMenu";
+import AdminMenu from "./AdminMenu";
 
 const CategoryList = () => {
 	const { data: categories, refetch } = useFetchCategoriesQuery();
@@ -67,7 +67,7 @@ const CategoryList = () => {
 			if (result.error) {
 				toast.error(result.error);
 			} else {
-        toast.success(`${result.name} is updated`);
+				toast.success(`${result.name} is updated`);
 				setSelectedCategory(null);
 				setUpdatingName("");
 				setModalVisible(false);
@@ -79,28 +79,30 @@ const CategoryList = () => {
 	};
 
 	const handleDeleteCategory = async () => {
-    try {
-      const result = await deleteCategory(selectedCategory._id).unwrap();
+		try {
+			const result = await deleteCategory(selectedCategory._id).unwrap();
 
-      if (result.error) {
-        toast.error(result.error);
-      } else {
-        toast.success(`Deleted successfully.`);
+			if (result.error) {
+				toast.error(result.error);
+			} else {
+				toast.success(`Deleted successfully.`);
 
-        setSelectedCategory(null);
-        setModalVisible(false);
-        refetch();
-      }
-    } catch (error) {
-      toast.error("Category delection failed. Tray again.");
-    }
-  };
+				setSelectedCategory(null);
+				setModalVisible(false);
+				refetch();
+			}
+		} catch (error) {
+			toast.error("Category delection failed. Tray again.");
+		}
+	};
 
 	return (
 		<div className="ml-[15rem] flex flex-col md:flex-row">
-			{/* <AdminMenu /> */}
+			<AdminMenu />
 			<div className="md:w-3/4 p-3">
-				<div className="ml-[5rem] mb-[10px] font-bold text-[25px]">Manage Categories</div>
+				<div className="ml-[5rem] mb-[10px] font-bold text-[25px]">
+					Manage Categories
+				</div>
 				<div className="p-3 ml-[5rem]">
 					<form onSubmit={handleCreateCategory} className="space-y-3 w-full">
 						<input
